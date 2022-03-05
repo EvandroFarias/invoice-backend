@@ -36,7 +36,7 @@ module.exports = {
     }
 
     if (!user || !bcrypt.compare(password, user.password)) {
-      return res.status(400).json({ Error: "Password or Login invalid." });
+      return res.status(401).json({ Error: "Password or Login invalid." });
     }
 
     res.send("ok");
