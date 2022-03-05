@@ -1,11 +1,12 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const { user } = require("pg/lib/defaults");
 
 module.exports = {
   async register(req, res) {
     var { userName, password, email } = req.body;
 
-    exists = (await User.findAll({ where: { userName } })).length;
+    exists = (await User.findAll({ where: { userName } })) ? true : false;
 
     if (!userName.length || !password.length || !email.length) {
       return res
@@ -18,7 +19,11 @@ module.exports = {
 
     try {
       var password = (await bcrypt.hash(password, 10)).toString();
-      const user = await User.create({ userName, password, email });
+      const user = await User.create({
+        userName,
+        password,
+        email: email.toLowerCase(),
+      });
       return res.status(201).json(user);
     } catch (e) {
       console.log(e);
