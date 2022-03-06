@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const { user } = require("pg/lib/defaults");
 
 module.exports = {
   async register(req, res) {

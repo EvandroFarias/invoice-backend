@@ -1,9 +1,9 @@
 const express = require("express");
-const UserController = require("../repos/User");
-const basicAuth = require("../middlewares/basicAuth");
+const UserRepo = require("../service/User");
+const basicAuth = require("../middleware/basicAuth");
 
 const routes = express.Router();
 
-routes.post("/login", basicAuth.authenticate, UserController.login);
+routes.post("/login", basicAuth.authenticate, UserRepo.login);
 
 module.exports = routes;

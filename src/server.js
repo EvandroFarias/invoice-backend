@@ -9,7 +9,7 @@ require("./database");
 const registerRoute = require("./api/register");
 const loginRoute = require("./api/login");
 
-const limiter = require("./middlewares/rateLimit")
+const limiter = require("./middleware/rateLimit")
 const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}))
