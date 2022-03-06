@@ -1,8 +1,8 @@
 const express = require("express");
-const UserRepo = require("../service/User");
+const UserService = require("../service/User");
 
 const routes = express.Router();
 
-routes.post("/register", UserRepo.register);
+routes.post("/register", UserService.register);
 
 module.exports = routes;
