@@ -16,9 +16,12 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      item: {
-        type: Sequelize.STRING,
+      item_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: "item", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       created_at: {
         type: Sequelize.DATE,

@@ -4,7 +4,8 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
-        userName: DataTypes.STRING,
+        firstName: DataTypes.STRING,
+        lastName: DataTypes.STRING,
         password: DataTypes.STRING,
         email: DataTypes.STRING,
       },
@@ -15,7 +16,11 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Invoice, { foreignKey: "user_id", as: "invoices" });
+    this.belongsToMany(models.Item, {
+      foreignKey: "user_id",
+      through: "invoice",
+      as: "item",
+    });
   }
 }
 

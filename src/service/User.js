@@ -3,46 +3,54 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   async register(req, res) {
-    var { userName, password, email } = req.body;
+    var { firstName, lastName, email, password } = req.body;
 
-    exists = (await User.findAll({ where: { userName } })) ? true : false;
+    exists = await User.findOne({ where: { email } });
 
-    if (!userName.length || !password.length || !email.length) {
+    if (
+      !firstName.length ||
+      !lastName.length ||
+      !password.length ||
+      !email.length
+    ) {
       return res
         .status(400)
-        .json({ "Missing Fields": "Form not properly filled by user." });
+        .json({ message: "Form not properly filled by user." });
     }
     if (exists) {
-      return res.status(400).json({ Error: "User name already taken." });
+      return res.status(400).json({ Message: "Email already registered." });
     }
 
     try {
       var password = (await bcrypt.hash(password, 10)).toString();
       const user = await User.create({
-        userName,
+        firstName,
+        lastName,
         password,
         email: email.toLowerCase(),
       });
-      return res.status(201).json(user);
+      return res.status(201).json({
+        message: `Registered sucessfully, e-mail confirmation sent to ${user.email}`,
+      });
     } catch (e) {
-      console.log(e);
-      res.send({ "BCrypt Error": "Something went wrong !" });
+      res.send({ message: e.message });
     }
   },
 
   async login(req, res) {
-    var { userName, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { userName } });
+    const user = await User.findOne({ where: { email } });
 
-    if (!password.length) {
-      return res.status(400).json({ Error: "Password must be given." });
-    }
-
-    if (!user || !bcrypt.compare(password, user.password)) {
-      return res.status(401).json({ Error: "Password or Login invalid." });
-    }
-
-    res.send("ok");
+    await bcrypt.compare(password, user.password).then((resolve) => {
+      if (!resolve) {
+        return res
+          .status(400)
+          .json({ message: "Email or password does not match." });
+      }
+      return res.status(200).json(
+        `Logged in as ${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}`
+      );
+    });
   },
 };

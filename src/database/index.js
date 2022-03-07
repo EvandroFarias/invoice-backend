@@ -1,15 +1,15 @@
 const Sequelize = require("sequelize");
 const dbConfig = require("../config/database");
-const Invoice = require("../models/Invoice");
 
+const Item = require("../models/Item");
 const User = require("../models/User");
 
-const connection = new Sequelize(dbConfig)
+const connection = new Sequelize(dbConfig);
 
-User.init(connection)
-Invoice.init(connection)
+User.init(connection);
+Item.init(connection);
 
-User.associate(connection.models)
-Invoice.associate(connection.models)
+User.associate(connection.models);
+Item.associate(connection.models);
 
-module.exports = connection
+module.exports = connection;
