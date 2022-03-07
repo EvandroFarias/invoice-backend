@@ -62,7 +62,7 @@ module.exports = {
           expiresIn: "2h",
         }
       );
-
+      
       res.set({ "Access-Token": token, "Token-type": "Bearer"});
 
       return res.status(200).json({ Message: "Logged in" });
