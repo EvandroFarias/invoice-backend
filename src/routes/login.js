@@ -2,8 +2,8 @@ const express = require("express");
 const UserService = require("../service/User");
 const basicAuth = require("../middleware/basicAuth");
 
-const routes = express.Router();
+const router = express.Router();
 
-routes.post("/login", basicAuth.authenticate, UserService.login);
+router.post("/login", basicAuth.authenticate, UserService.login);
 
-module.exports = routes;
+module.exports = router;

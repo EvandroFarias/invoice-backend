@@ -1,8 +1,8 @@
 const express = require("express");
 
-const routes = express.Router();
+const router = express.Router();
 const itemService = require("../service/Item");
 
-routes.post("/item/:user_id", itemService.store);
+router.post("/item/:user_id", itemService.store);
 
-module.exports = routes;
+module.exports = router;

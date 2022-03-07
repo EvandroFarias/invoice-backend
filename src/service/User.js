@@ -15,10 +15,10 @@ module.exports = {
     ) {
       return res
         .status(400)
-        .json({ message: "Form not properly filled by user." });
+        .json({ Error: "Form not properly filled by user." });
     }
     if (exists) {
-      return res.status(400).json({ Message: "Email already registered." });
+      return res.status(400).json({ Error: "Email already registered." });
     }
 
     try {
@@ -30,10 +30,10 @@ module.exports = {
         email: email.toLowerCase(),
       });
       return res.status(201).json({
-        message: `Registered sucessfully, e-mail confirmation sent to ${user.email}`,
+        Error: `Registered sucessfully, e-mail confirmation sent to ${user.email}`,
       });
     } catch (e) {
-      res.send({ message: e.message });
+      res.send({ Error: e.message });
     }
   },
 
@@ -46,11 +46,13 @@ module.exports = {
       if (!resolve) {
         return res
           .status(400)
-          .json({ message: "Email or password does not match." });
+          .json({ Error: "Email or password does not match." });
       }
-      return res.status(200).json(
-        `Logged in as ${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}`
-      );
+      return res
+        .status(200)
+        .json(
+          `Logged in as ${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}`
+        );
     });
   },
 };

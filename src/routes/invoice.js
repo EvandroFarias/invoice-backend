@@ -1,8 +1,8 @@
 const express = require("express");
 
-const routes = express.Router();
+const router = express.Router();
 const invoiceService = require("../service/Invoice");
 
-routes.get("/invoice/:user_id", invoiceService.index)
+router.get("/invoice/:user_id", invoiceService.index);
 
-module.exports = routes;
+module.exports = router;
