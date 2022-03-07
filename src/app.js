@@ -1,7 +1,7 @@
 require("dotenv").config();
 require("./database");
 const express = require("express");
-// const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 
 const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
@@ -12,7 +12,7 @@ const limiter = require("./middleware/rateLimit");
 const app = express();
 
 app.use(express.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(limiter);
 // app.use(express.urlencoded({ extended: true, })); // body-parser Deprecated ????
 

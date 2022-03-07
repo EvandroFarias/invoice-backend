@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
+const jwt = require("jsonwebtoken");
+
+const SECRET = process.env.JWT_KEY;
+
 module.exports = {
   async register(req, res) {
     var { firstName, lastName, email, password } = req.body;
@@ -30,7 +34,7 @@ module.exports = {
         email: email.toLowerCase(),
       });
       return res.status(201).json({
-        Error: `Registered sucessfully, e-mail confirmation sent to ${user.email}`,
+        Message: `Registered sucessfully, e-mail confirmation sent to ${user.email}`,
       });
     } catch (e) {
       res.send({ Error: e.message });
@@ -48,11 +52,20 @@ module.exports = {
           .status(400)
           .json({ Error: "Email or password does not match." });
       }
-      return res
-        .status(200)
-        .json(
-          `Logged in as ${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}`
-        );
+      const token = jwt.sign(
+        {
+          user_id: user.id,
+          email: user.email,
+        },
+        SECRET,
+        {
+          expiresIn: "2h",
+        }
+      );
+
+      res.set({ "Access-Token": token, "Token-type": "Bearer"});
+
+      return res.status(200).json({ Message: "Logged in" });
     });
   },
 };
