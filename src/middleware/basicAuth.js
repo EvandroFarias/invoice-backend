@@ -20,7 +20,7 @@ module.exports = {
         }
       });
     } catch (e) {
-      return e.message;
+      return res.json(e.message)
     }
   },
 };

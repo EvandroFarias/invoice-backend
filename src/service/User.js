@@ -37,7 +37,7 @@ module.exports = {
         Message: `Registered sucessfully, e-mail confirmation sent to ${user.email}`,
       });
     } catch (e) {
-      res.send({ Error: e.message });
+      return res.status(404).send({ Error: e.message });
     }
   },
 
@@ -62,10 +62,17 @@ module.exports = {
           expiresIn: "2h",
         }
       );
-      
-      res.set({ "Access-Token": token, "Token-type": "Bearer"});
+
+      res.set('Access-Control-Expose-Headers', 'x-access-token')
+      res.set("x-access-token", token);
 
       return res.status(200).json({ Message: "Logged in" });
     });
+  },
+
+  async checkUserEmail(req, res) {
+    const { email } = req.params;
+    const user = await User.findOne({ where: { email } });
+    res.json(!!user);
   },
 };
