@@ -2,14 +2,14 @@ const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
   try {
-    userToken = req.headers.authorization.split(" ");
-    verify = jwt.verify(userToken[1], process.env.JWT_KEY);
-    if (verify.user_id == req.params.user_id) {
+    userToken = req.header('x-access-token');
+    verify = jwt.verify(userToken, process.env.JWT_KEY);
+    if (verify.email == req.params.email) {
       next();
     } else {
       return res
         .status(401)
-        .json({ Error: "Authentication failed "});
+        .json({ Error: "Authentication failed"});
     }
   } catch (e) {
     return res

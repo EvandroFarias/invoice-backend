@@ -66,7 +66,7 @@ module.exports = {
       res.set('Access-Control-Expose-Headers', 'x-access-token')
       res.set("x-access-token", token);
 
-      return res.status(200).json({ Message: "Logged in" });
+      return res.status(200).json({ Message: "Logged in", payload: user });
     });
   },
 

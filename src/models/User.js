@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const { v4: uuidv4 } = require("uuid");
 
 class User extends Model {
   static init(sequelize) {
@@ -6,6 +7,12 @@ class User extends Model {
       {
         firstName: DataTypes.STRING,
         lastName: DataTypes.STRING,
+        fullName: {
+          type: DataTypes.VIRTUAL,
+          get() {
+            return `${this.firstName} ${this.lastName}`;
+          },
+        },
         password: DataTypes.STRING,
         email: DataTypes.STRING,
       },
@@ -13,15 +20,20 @@ class User extends Model {
         sequelize,
       }
     );
+
+    User.beforeCreate((user) => (user.id = uuidv4()));
   }
 
   static associate(models) {
-    this.belongsToMany(models.Item, {
-      foreignKey: "user_id",
-      through: "invoice",
-      as: "item",
-    });
+    this.hasMany(models.Item, { foreignKey: "user_id", as: "items" });
   }
+  // static associate(models) {
+  //   this.belongsToMany(models.Item, {
+  //     foreignKey: "user_id",
+  //     through: "invoice",
+  //     as: "item",
+  //   });
+  // }
 }
 
 module.exports = User;
