@@ -1,30 +1,29 @@
-const uuid = require('uuid');
 "use strict";
 
 module.exports = {
-  up(queryInterface, Sequelize) {
-    return queryInterface.createTable("users", {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("items", {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
       },
-      first_name: {
+      invoice_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: { model: "invoices", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      last_name: {
-        type: Sequelize.STRING,
+      value: {
+        type: Sequelize.DECIMAL,
         allowNull: false,
       },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
+
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -36,7 +35,7 @@ module.exports = {
     });
   },
 
-  down(queryInterface, Sequelize) {
-    return queryInterface.dropTable("users");
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("items");
   },
 };

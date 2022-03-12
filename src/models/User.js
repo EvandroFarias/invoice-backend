@@ -21,12 +21,14 @@ class User extends Model {
       }
     );
 
-    User.beforeCreate((user) => (user.id = uuidv4()));
+    this.beforeCreate((user) => (user.id = uuidv4()));
   }
 
   static associate(models) {
-    this.hasMany(models.Item, { foreignKey: "user_id", as: "items" });
+    this.hasMany(models.Invoice, {foreignKey: "user_id", as :"owner"})
   }
+
+  // this.hasMany(models.Item, { foreignKey: "user_id", as: "items" });
   // static associate(models) {
   //   this.belongsToMany(models.Item, {
   //     foreignKey: "user_id",

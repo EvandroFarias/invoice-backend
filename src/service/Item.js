@@ -1,5 +1,5 @@
 const Item = require("../models/Item");
-const User = require("../models/User");
+const Invoice = require('../models/Invoice')
 
 module.exports = {
   async index(req, res) {
@@ -18,21 +18,25 @@ module.exports = {
   },
 
   async store(req, res) {
-    const { email } = req.params;
+    const { invoice_id } = req.params;
     const { name, value } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const invoice = await Invoice.findByPk(invoice_id);
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    if (!invoice) {
+      return res.status(404).json({ Error: "Invoice not found" });
     }
 
-    const item = await Item.create({
-      name,
-      value,
-      user_id: user.id,
-    });
-
-    return res.json(item);
+    try {
+      const item = await Item.create({
+        name,
+        value,
+        invoice_id,
+      });
+  
+      return res.json(item);
+    } catch (e){
+      return res.json(e.message)
+    }
   },
 };

@@ -1,33 +1,39 @@
-// const User = require("../models/User");
+const User = require("../models/User");
+const Invoice = require("../models/Invoice");
 
-// module.exports = {
-//   async index(req, res) {
-//     const { email } = req.params;
+module.exports = {
+  async index(req, res) {
+    const { user_id } = req.params;
 
-//     try {
-//       const userInvoice = await User.findOne({
-//         where: { email: email },
-//         attributes: ["firstName", "lastName", "email"],
-//         include: [
-//           {
-//             association: "item",
-//             attributes: ["name", "value"],
-//           },
-//         ],
-//       });
+    const invoice = await Invoice.findAll({
+      where: { user_id },
+      attributes: ["name"],
+      include: {
+        association: "items",
+        as: "item",
+        attributes: ["id", "name", "value"],
+      },
+    });
 
-//       if(!userInvoice){
-//         return res.status(404).json({Error: "User not found"})
-//       }
+    res.json(invoice);
+  },
 
-//       if (!userInvoice.item.length) {
-//         return res.status(200).json({ Error: "No invoice found" });
-//       }
+  async store(req, res) {
+    const { user_id } = req.params;
+    const { name } = req.body;
 
-//       return res.status(200).json(userInvoice);
+    const user = await User.findByPk(user_id);
 
-//     } catch (e) {
-//       return res.status(404).json({Error: e.message});
-//     }
-//   },
-// };
+    if (!user) {
+      return res.status(404).json({ Error: "User not found" });
+    }
+
+    try {
+      const invoice = await Invoice.create({ name, user_id: user.id });
+
+      return res.json(invoice);
+    } catch (e) {
+      return res.json(e.message);
+    }
+  },
+};
