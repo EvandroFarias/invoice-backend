@@ -7,7 +7,7 @@ module.exports = {
 
     const invoice = await Invoice.findAll({
       where: { user_id },
-      attributes: ["name"],
+      attributes: ["id","name"],
       include: {
         association: "items",
         as: "item",
