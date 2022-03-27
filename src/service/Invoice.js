@@ -7,15 +7,31 @@ module.exports = {
 
     const invoice = await Invoice.findAll({
       where: { user_id },
-      attributes: ["id","name"],
+      attributes: ["id", "name"],
       include: {
         association: "items",
-        as: "item",
         attributes: ["id", "name", "value"],
       },
     });
 
     res.json(invoice);
+  },
+
+  async findByPk(req, res) {
+    const { invoice_id } = req.params;
+
+    try {
+      const invoice = await Invoice.findByPk(invoice_id, {
+        attributes: ["id", "name", "created_at", "updated_at"],
+        include: {
+          association: "items",
+          attributes: ["name", "value"],
+        },
+      });
+      return res.json(invoice);
+    } catch (e) {
+      return res.json({ Error: e.message });
+    }
   },
 
   async store(req, res) {
@@ -36,4 +52,6 @@ module.exports = {
       return res.json(e.message);
     }
   },
+
+  async single(req, res) {},
 };

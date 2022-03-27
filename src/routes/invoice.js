@@ -5,6 +5,7 @@ const router = express.Router();
 const invoiceService = require("../service/Invoice");
 
 router.post("/invoice/:user_id", invoiceService.store);
-router.get("/invoice/:user_id", invoiceService.index);
+router.get("/invoices/:user_id", invoiceService.index);
+router.get("/invoice/:invoice_id", invoiceService.findByPk);
 
 module.exports = router;
