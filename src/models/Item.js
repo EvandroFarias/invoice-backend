@@ -15,7 +15,7 @@ class Item extends Model {
       }
     );
 
-    Item.beforeCreate((user) => (user.id = uuidv4()));
+    Item.beforeCreate((item) => (item.id = uuidv4()));
   }
 
   static associate(models) {

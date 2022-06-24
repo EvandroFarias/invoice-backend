@@ -8,4 +8,6 @@ router.get("/item/:user_id", itemService.index);
 
 router.post("/item/:invoice_id", itemService.store);
 
+router.delete("/item/:item_id", itemService.delete)
+
 module.exports = router;

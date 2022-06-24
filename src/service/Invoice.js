@@ -25,7 +25,7 @@ module.exports = {
         attributes: ["id", "name", "created_at", "updated_at"],
         include: {
           association: "items",
-          attributes: ["name", "value"],
+          attributes: ["id", "name", "value"],
         },
       });
       return res.json(invoice);
