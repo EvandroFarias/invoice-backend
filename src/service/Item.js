@@ -50,7 +50,7 @@ module.exports = {
     }
 
     try {
-      Item.destroy({ where: { id: item.id } })
+      Item.destroy({ where: { id: item.id }})
       return res.status(200).json(item)
     } catch (e) {
       return res.json(e.message)

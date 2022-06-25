@@ -27,15 +27,6 @@ class User extends Model {
   static associate(models) {
     this.hasMany(models.Invoice, {foreignKey: "user_id", as :"owner"})
   }
-
-  // this.hasMany(models.Item, { foreignKey: "user_id", as: "items" });
-  // static associate(models) {
-  //   this.belongsToMany(models.Item, {
-  //     foreignKey: "user_id",
-  //     through: "invoice",
-  //     as: "item",
-  //   });
-  // }
 }
 
 module.exports = User;

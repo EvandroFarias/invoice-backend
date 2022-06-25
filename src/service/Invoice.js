@@ -1,9 +1,9 @@
-const User = require("../models/User");
-const Invoice = require("../models/Invoice");
+const User = require("../models/User")
+const Invoice = require("../models/Invoice")
 
 module.exports = {
   async index(req, res) {
-    const { user_id } = req.params;
+    const { user_id } = req.params
 
     const invoice = await Invoice.findAll({
       where: { user_id },
@@ -12,13 +12,13 @@ module.exports = {
         association: "items",
         attributes: ["id", "name", "value"],
       },
-    });
+    })
 
-    res.json(invoice);
+    res.json(invoice)
   },
 
   async findByPk(req, res) {
-    const { invoice_id } = req.params;
+    const { invoice_id } = req.params
 
     try {
       const invoice = await Invoice.findByPk(invoice_id, {
@@ -27,31 +27,46 @@ module.exports = {
           association: "items",
           attributes: ["id", "name", "value"],
         },
-      });
-      return res.json(invoice);
+      })
+      return res.json(invoice)
     } catch (e) {
-      return res.json({ Error: e.message });
+      return res.json({ Error: e.message })
     }
   },
 
   async store(req, res) {
-    const { user_id } = req.params;
-    const { name } = req.body;
+    const { user_id } = req.params
+    const { name } = req.body
 
-    const user = await User.findByPk(user_id);
+    const user = await User.findByPk(user_id)
 
     if (!user) {
-      return res.status(404).json({ Error: "User not found" });
+      return res.status(404).json({ Error: "User not found" })
     }
 
     try {
-      const invoice = await Invoice.create({ name, user_id: user.id });
+      const invoice = await Invoice.create({ name, user_id: user.id })
 
-      return res.json(invoice);
+      return res.json(invoice)
     } catch (e) {
-      return res.json(e.message);
+      return res.json(e.message)
     }
   },
 
-  async single(req, res) {},
-};
+  async delete(req, res) {
+    const { invoice_id } = req.params
+
+    const invoice = Invoice.findByPk(invoice_id)
+
+    if (!invoice) {
+      return res.status(404).json({ Error: "Invoice not found" })
+    }
+
+    try {
+      Invoice.destroy({ where: { id: invoice_id } })
+      return res.status(200).json(invoice)
+    } catch (e) {
+      return res.json(e)
+    }
+  },
+}
